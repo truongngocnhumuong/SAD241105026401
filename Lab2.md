@@ -206,5 +206,4 @@
   + **PaymentProcessor**: Nhiệm vụ: Xử lý thanh toán, gửi giao dịch đến hệ thống ngân hàng.
   + **BankSystem**: Nhiệm vụ: Nhận và xử lý các giao dịch thanh toán từ hệ thống bảng lương.
   + **PaycheckPrinter**: Nhiệm vụ: In phiếu lương nếu phương thức thanh toán yêu cầu in séc.
-# Code Java mô phỏng ca sử dụng Maintain Timecard.
 
