@@ -25,17 +25,6 @@
 ### f. Điều kiện sau (Post-onditions):
 - Nếu đăng nhập thành công, người dùng sẽ được chuyển đến màn hình chính của hệ thống.
 - Nếu đăng nhập thất bại, hệ thống sẽ yêu cầu nhập lại thông tin hoặc hủy thao tác đăng nhập.
-### g. Mối quan hệ giữa các lớp (Class Interactions):
-- Any User: Tác nhân khởi tạo quy trình đăng nhập và nhập thông tin đăng nhập.
-- LoginForm (Giao diện đăng nhập):
-  + Nhận thông tin từ người dùng.
-  + Hiển thị thông báo nếu thông tin đăng nhập không hợp lệ.
-  + Gửi yêu cầu xác thực thông tin tới hệ thống.
- 
-- Authentication (Hệ thống xác thực):
-  + Nhận thông tin đăng nhập từ giao diện LoginForm.
-  + Kiểm tra tính hợp lệ của thông tin đăng nhập (username và password).
-  + Trả về kết quả xác thực cho giao diện LoginForm.
 ## 2. Use Case : Maintain Timecard
 ### a. Tên : Maintain Timecard
 ### b. Mô tả ngắn gọn : 
@@ -66,6 +55,57 @@
 ### f. Post-Conditions:
 - Nếu ca sử dụng thành công, thẻ chấm công của Nhân viên được cập nhật hoặc tạo mới trong hệ thống.
 - Nếu ca sử dụng thất bại, trạng thái của hệ thống không thay đổi và Nhân viên có thể thử lại.
+## 3. Use-Case : Run Payroll
+### a. Tên : Run Payroll
+### b. Mô tả ngắn gọn : 
+- Ca sử dụng Run Payroll được thực hiện để tính toán và xử lý bảng lương của nhân viên theo chu kỳ thanh toán định kỳ. Hệ thống thực hiện các bước để lấy thông tin bảng chấm công, tính toán lương, và tạo giao dịch thanh toán qua hệ thống ngân hàng hoặc in phiếu lương.
+### c. Tác nhân :
+- System Clock (Đồng hồ hệ thống): Kích hoạt việc chạy bảng lương đúng vào ngày trả lương.
+- Payroll Controller (Bộ điều khiển bảng lương): Điều phối toàn bộ quy trình xử lý bảng lương.
+- Employee (Nhân viên): Cung cấp thông tin chấm công và đơn đặt hàng nếu cần.
+- Timecard (Thẻ chấm công): Chứa thông tin về giờ làm việc của nhân viên.
+- Purchase Order (Đơn đặt hàng): Lưu trữ thông tin đơn hàng cho nhân viên làm việc theo hoa hồng.
+- Paycheck (Phiếu lương): Lưu trữ thông tin phiếu lương đã được tạo.
+- Printer Interface (Giao diện máy in): In phiếu lương cho nhân viên.
+- Bank System (Hệ thống ngân hàng): Xử lý giao dịch chuyển khoản thanh toán lương.
+### d. Luồng sự kiện :
+- Luồng cơ bản:
+  + System Clock khởi động ca sử dụng Run Payroll đúng ngày trả lương.
+  + Payroll Controller bắt đầu chạy bảng lương:
+    - Kiểm tra xem có phải ngày trả lương không.
+    - Lấy thông tin lương của nhân viên từ Timecard và Purchase Order.
+    - Tính toán số tiền lương phải trả.
+    - Tạo đối tượng phiếu lương (Paycheck) với số tiền đã tính.
+   
+  + Payroll Controller kiểm tra phương thức thanh toán:
+    - Nếu nhân viên nhận lương qua ngân hàng, hệ thống sẽ lấy thông tin ngân hàng và gửi giao dịch thanh toán đến Bank System.
+    - Nếu nhân viên nhận lương qua phiếu lương, hệ thống sẽ gửi lệnh in phiếu lương qua Printer Interface để in phiếu.
+   
+- Luồng phụ :
+  + Nếu ngày chạy bảng lương không phải ngày trả lương, hệ thống không thực hiện các bước tiếp theo.
+  + Nếu không tìm thấy thông tin nhân viên hoặc thẻ chấm công, quá trình chạy bảng lương sẽ bị hủy và báo lỗi.
+ 
+### e. Pre-Conditions:
+- Hệ thống phải xác định đúng ngày trả lương theo lịch trình đã định trong hệ thống.
+- Dữ liệu chấm công của tất cả nhân viên phải có sẵn trong cơ sở dữ liệu.
+- Thông tin nhân viên đầy đủ bao gồm:
+  + Thông tin thẻ chấm công (Timecard).
+  + Thông tin đơn đặt hàng (Purchase Order) (đối với nhân viên hưởng hoa hồng).
+  + Phương thức thanh toán (in phiếu lương hoặc chuyển khoản ngân hàng).
+ 
+- Hệ thống ngân hàng phải sẵn sàng và kết nối để thực hiện giao dịch chuyển khoản nếu cần.
+- Máy in hoạt động và kết nối với hệ thống để in phiếu lương cho nhân viên nhận phiếu giấy.
+### f. Post-Conditions:
+- Lương của tất cả nhân viên đã được tính toán và xử lý thành công.
+- Phiếu lương (Paycheck) được tạo cho từng nhân viên với số tiền chính xác.
+- Thanh toán lương được gửi thành công:
+  + Giao dịch chuyển khoản được gửi đến hệ thống ngân hàng cho nhân viên nhận lương qua tài khoản ngân hàng.
+  + Phiếu lương được in thông qua PrinterInterface cho nhân viên nhận lương bằng phiếu.
+ 
+- Thông báo thành công hoặc lỗi được ghi nhận trong hệ thống, nếu xảy ra sự cố trong quá trình tính toán hoặc giao dịch.
+- Dữ liệu bảng lương được cập nhật trong cơ sở dữ liệu để lưu lại các giao dịch đã thực hiện.
+   
+
   
 
 
