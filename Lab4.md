@@ -25,6 +25,8 @@
 ### f. Điều kiện sau (Post-onditions):
 - Nếu đăng nhập thành công, người dùng sẽ được chuyển đến màn hình chính của hệ thống.
 - Nếu đăng nhập thất bại, hệ thống sẽ yêu cầu nhập lại thông tin hoặc hủy thao tác đăng nhập.
+### g. Lí do thiết kế :
+- Ca sử dụng này là bắt buộc vì nó đảm bảo an toàn cho hệ thống. Xác thực thông tin người dùng trước khi cho phép truy cập vào dữ liệu nhạy cảm như thông tin lương.
 ## 2. Use Case : Maintain Timecard
 ### a. Tên : Maintain Timecard
 ### b. Mô tả ngắn gọn : 
@@ -55,6 +57,8 @@
 ### f. Post-Conditions:
 - Nếu ca sử dụng thành công, thẻ chấm công của Nhân viên được cập nhật hoặc tạo mới trong hệ thống.
 - Nếu ca sử dụng thất bại, trạng thái của hệ thống không thay đổi và Nhân viên có thể thử lại.
+### g. Lí do thiết kế :
+- Ca sử dụng này giúp hệ thống theo dõi và ghi nhận thời gian làm việc của nhân viên, từ đó có cơ sở tính toán lương chính xác.
 ## 3. Use-Case : Run Payroll
 ### a. Tên : Run Payroll
 ### b. Mô tả ngắn gọn : 
@@ -104,6 +108,8 @@
  
 - Thông báo thành công hoặc lỗi được ghi nhận trong hệ thống, nếu xảy ra sự cố trong quá trình tính toán hoặc giao dịch.
 - Dữ liệu bảng lương được cập nhật trong cơ sở dữ liệu để lưu lại các giao dịch đã thực hiện.
+### g. Lí do thiết kế :
+- Đây là ca sử dụng quan trọng nhất, giúp thực hiện chức năng cốt lõi của hệ thống trả lương: tính toán chính xác và đảm bảo thanh toán kịp thời cho nhân viên.
    
 
   
