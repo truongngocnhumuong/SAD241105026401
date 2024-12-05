@@ -110,6 +110,47 @@
 - Dữ liệu bảng lương được cập nhật trong cơ sở dữ liệu để lưu lại các giao dịch đã thực hiện.
 ### g. Lí do thiết kế :
 - Đây là ca sử dụng quan trọng nhất, giúp thực hiện chức năng cốt lõi của hệ thống trả lương: tính toán chính xác và đảm bảo thanh toán kịp thời cho nhân viên.
+ ## 4. Use-Case : Print Paycheck
+### a. Tên : Print Paycheck
+### b. Mô tả ngắn gọn : 
+- In phiếu lương cho nhân viên nhận lương qua hình thức phiếu giấy.
+### c. Tác nhân : Payroll System (Hệ thống trả lương)
+### d. Luồng sự kiện :
+- Luồng cơ bản:
+  + PayrollController gửi yêu cầu in phiếu lương tới PrintService.
+  + PrintService nhận thông tin từ Paycheck.
+  + PrintService gửi lệnh in tới máy in và in phiếu lương.
+- Luồng phụ:
+  + Máy in không hoạt động:
+    - Hệ thống thông báo lỗi và chờ xử lý.
+    - Quản trị viên kiểm tra và khởi động lại máy in.
+### e. Pre-Conditions:
+- Phiếu lương Paycheck đã được tạo thành công trong quy trình trả lương.
+- Máy in phải được kết nối và sẵn sàng hoạt động.
+### f. Post-Conditions:
+- Phiếu lương được in thành công và giao cho nhân viên.
+### g. Lí do thiết kế :
+- Đáp ứng nhu cầu của nhân viên nhận lương qua phiếu giấy thay vì chuyển khoản ngân hàng.
+## 5. Use-Case : Maintain Purchase Order
+### a. Tên : Maintain Purchase Order
+### b. Mô tả ngắn gọn : Quản lý đơn hàng của nhân viên hưởng hoa hồng để tính toán lương dựa trên doanh số bán hàng.
+### c. Tác nhân : Commissioned Employee (Nhân viên hưởng hoa hồng)
+### d. Luồng sự kiện :
+- Luồng cơ bản:
+  + Nhân viên mở giao diện nhập đơn hàng PurchaseOrderForm.
+  + Nhân viên nhập hoặc cập nhật thông tin đơn hàng và sản phẩm.
+  + PurchaseOrderForm gửi thông tin tới PurchaseOrderController.
+  + PurchaseOrderController xác thực và lưu dữ liệu vào PurchaseOrderDatabase.
+- Luồng phụ:
+  + Mã đơn hàng không hợp lệ:
+    - Hệ thống hiển thị thông báo lỗi “Invalid Purchase Order”.
+    - Nhân viên phải nhập lại mã đơn hàng hợp lệ.
+### e. Pre-Conditions:
+- Nhân viên phải đăng nhập vào hệ thống trước khi thực hiện thao tác quản lý đơn hàng.
+### f. Post-Conditions:
+- Thông tin đơn hàng của nhân viên được tạo mới, cập nhật hoặc xóa khỏi hệ thống.
+### g. Lí do thiết kế :
+- Đảm bảo dữ liệu doanh số bán hàng của nhân viên hưởng hoa hồng được ghi nhận và tính lương chính xác.
    
 
   
