@@ -263,10 +263,75 @@
   + Kết nối PrintService với PrinterInterface.
 - Xử lý lỗi: Triển khai logic thử lại (retryPrint()) và thông báo lỗi.
 - Kiểm tra hoạt động: Mô phỏng tình huống máy in hoạt động và không hoạt động để kiểm tra luồng xử lý.
-## 5. Hệ thống con từ use-case Login:
+## 5. Hệ thống con từ use-case Maintain Purchase Order:
 ### a. Mô hình class Diagram:
-### b. Sequence Diagram
-### c. Activity Diagram
-### d. Mô tả hệ thống con
-### e. Các bước thiết kế chi tiết
+- Lớp : PurchaseOrder
+  + Thuộc tính:
+    - orderID: String
+    - employeeID: String
+    - productID: String
+    - quantity: int
+    - totalAmount: double
+    - orderDate: Date
+  + Phương thức:
+    - validateOrder(): boolean (Xác thực thông tin đơn hàng)
+    - calculateTotal(): double (Tính tổng số tiền)
+- Lớp : PurchaseOrderController
+  + Thuộc tính: purchaseOrders: List<PurchaseOrder> (Danh sách đơn hàng)
+  + Phương thức:
+    - createOrder(order: PurchaseOrder): void (Tạo đơn hàng mới)
+    - updateOrder(orderID: String, updatedOrder: PurchaseOrder): void (Cập nhật đơn hàng)
+    - deleteOrder(orderID: String): void (Xóa đơn hàng)
+    - validateOrder(order: PurchaseOrder): boolean (Xác thực thông tin đơn hàng)
+- Lớp : PurchaseOrderDatabase
+  + Phương thức:
+    - saveOrder(order: PurchaseOrder): void (Lưu đơn hàng)
+    - updateOrder(orderID: String, updatedOrder: PurchaseOrder): void (Cập nhật đơn hàng trong cơ sở dữ liệu)
+    - deleteOrder(orderID: String): void (Xóa đơn hàng khỏi cơ sở dữ liệu)
+- Lớp: Employee
+  + Thuộc tính:
+    - employeeID: String
+    - name: String
+  + Phương thức: accessPurchaseOrder(): List<PurchaseOrder> (Xem danh sách đơn hàng của nhân viên)
+- Lớp: ValidationService
+  + Phương thức:
+    - validateOrderID(orderID: String): boolean (Xác thực mã đơn hàng)
+    - validateProductID(productID: String): boolean (Xác thực mã sản phẩm)
+### b. Sequence Diagram:
+- Luồng xử lý cơ bản:
+  + Employee mở giao diện PurchaseOrderForm và nhập thông tin đơn hàng.
+  + PurchaseOrderForm gửi thông tin đến PurchaseOrderController.
+  + PurchaseOrderController:
+    - Gọi ValidationService để xác thực thông tin đơn hàng (mã đơn hàng, mã sản phẩm, số lượng).
+    - Nếu hợp lệ, gọi PurchaseOrderDatabase để lưu thông tin.
+    - Trả về kết quả thành công hoặc thông báo lỗi.
+- Luồng phụ: Mã đơn hàng không hợp lệ:
+  + ValidationService trả về lỗi "Invalid Purchase Order".
+  + PurchaseOrderController gửi thông báo lỗi tới PurchaseOrderForm.
+  + Employee chỉnh sửa lại thông tin và gửi lại.
+### c. Activity Diagram: 
+- Nhập thông tin đơn hàng: Nhân viên nhập mã đơn hàng, mã sản phẩm, số lượng, và ngày đặt hàng.
+- Xác thực đơn hàng:
+  + Kiểm tra mã đơn hàng, mã sản phẩm, và số lượng:
+    - Nếu hợp lệ, chuyển sang bước tiếp theo.
+    - Nếu không hợp lệ, hiển thị thông báo lỗi.
+- Lưu hoặc cập nhật đơn hàng: Lưu đơn hàng mới hoặc cập nhật đơn hàng hiện có.
+- Hoàn tất: Thông báo thành công.
+### d. Mô tả hệ thống con:
+- Module xử lý chính:
+  + PurchaseOrderController:
+    - Điều phối luồng xử lý giữa giao diện người dùng và cơ sở dữ liệu.
+    - Thực hiện xác thực và gọi các hành động liên quan (tạo, cập nhật, xóa đơn hàng).
+  + ValidationService: Đảm bảo dữ liệu đầu vào hợp lệ (mã đơn hàng, mã sản phẩm).
+  + PurchaseOrderDatabase: Lưu trữ và quản lý dữ liệu đơn hàng.
+- Giao diện người dùng:
+  + PurchaseOrderForm:
+    - Cho phép nhân viên nhập thông tin đơn hàng.
+    - Hiển thị thông báo lỗi hoặc thành công.
+### e. Các bước thiết kế chi tiết:
+- Phát triển các lớp cơ bản: Tạo các lớp PurchaseOrder, PurchaseOrderController, PurchaseOrderDatabase, và ValidationService.
+- Kết nối giao diện người dùng: Tạo giao diện PurchaseOrderForm để nhập và hiển thị thông tin đơn hàng.
+- Kiểm thử:
+  + Mô phỏng việc tạo, cập nhật, và xóa đơn hàng để kiểm tra luồng xử lý.
+  + Kiểm tra các tình huống lỗi như mã đơn hàng không hợp lệ hoặc lỗi kết nối cơ sở dữ liệu.
 
